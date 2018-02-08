@@ -7,6 +7,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -75,13 +76,38 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         txtDay.setText(getIntent().getStringExtra("txtDay"));
         txtTime.setText(getIntent().getStringExtra("txtTime"));
         cliAddress1.setText(getIntent().getStringExtra("cliAddress1"));
-        cliAddress2.setText(getIntent().getStringExtra("cliAddress2"));
-        cliCity.setText(getIntent().getStringExtra("cliCity"));
-        cliState.setText(getIntent().getStringExtra("cliState"));
-        cliZip.setText(getIntent().getStringExtra("cliZip"));
-        cliCountry.setText(getIntent().getStringExtra("cliCountry"));
+        if(getIntent().getStringExtra("cliAddress2").toString().equals("")){
+            cliAddress2.setVisibility(View.GONE);
+        }else{
+            cliAddress2.setText(getIntent().getStringExtra("cliAddress2"));
+        }
+
+        if(getIntent().getStringExtra("cliCity").toString().equals("")){
+            cliCity.setVisibility(View.GONE);
+        }else{
+            cliCity.setText(getIntent().getStringExtra("cliCity"));
+        }
+
+        if(getIntent().getStringExtra("cliState").toString().equals("")){
+            cliState.setVisibility(View.GONE);
+        }else{
+            cliState.setText(getIntent().getStringExtra("cliState"));
+        }
+
+        if(getIntent().getStringExtra("cliZip").toString().equals("")){
+            cliZip.setVisibility(View.GONE);
+        }else{
+            cliZip.setText(getIntent().getStringExtra("cliZip"));
+        }
+
+        if(getIntent().getStringExtra("cliCountry").toString().equals("")){
+            cliCountry.setVisibility(View.GONE);
+        }else{
+            cliCountry.setText(getIntent().getStringExtra("cliCountry"));
+        }
+
         cliPhone.setText(getIntent().getStringExtra("cliPhone"));
-        appointmentId.setText(getIntent().getStringExtra("appointmentId"));
+        appointmentId.setText("Appointment #: " + getIntent().getStringExtra("appointmentId"));
     }
 
     @Override
