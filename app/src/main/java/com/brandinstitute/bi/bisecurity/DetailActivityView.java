@@ -7,16 +7,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,34 +18,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * Created by cvega on 2/5/2018.
  */
 
 public class DetailActivityView extends FragmentActivity implements OnMapReadyCallback {
-
-    // flag for GPS status
-    boolean isGPSEnabled = false;
-
-    // flag for network status
-    boolean isNetworkEnabled = false;
-
-    boolean canGetLocation = false;
-
-    Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
-
-
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     TextView txtMonth;
     TextView txtDay;
@@ -75,9 +46,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-        final String mPhoneNumber = tMgr.getLine1Number();
+        String s = getIntent().getStringExtra("companyName");
+        String ss = getIntent().getStringExtra("clientContact");
         setContentView(R.layout.appointment_detail_view);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -106,13 +76,38 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         txtDay.setText(getIntent().getStringExtra("txtDay"));
         txtTime.setText(getIntent().getStringExtra("txtTime"));
         cliAddress1.setText(getIntent().getStringExtra("cliAddress1"));
-        cliAddress2.setText(getIntent().getStringExtra("cliAddress2"));
-        cliCity.setText(getIntent().getStringExtra("cliCity"));
-        cliState.setText(getIntent().getStringExtra("cliState"));
-        cliZip.setText(getIntent().getStringExtra("cliZip"));
-        cliCountry.setText(getIntent().getStringExtra("cliCountry"));
+        if(getIntent().getStringExtra("cliAddress2").toString().equals("")){
+            cliAddress2.setVisibility(View.GONE);
+        }else{
+            cliAddress2.setText(getIntent().getStringExtra("cliAddress2"));
+        }
+
+        if(getIntent().getStringExtra("cliCity").toString().equals("")){
+            cliCity.setVisibility(View.GONE);
+        }else{
+            cliCity.setText(getIntent().getStringExtra("cliCity"));
+        }
+
+        if(getIntent().getStringExtra("cliState").toString().equals("")){
+            cliState.setVisibility(View.GONE);
+        }else{
+            cliState.setText(getIntent().getStringExtra("cliState"));
+        }
+
+        if(getIntent().getStringExtra("cliZip").toString().equals("")){
+            cliZip.setVisibility(View.GONE);
+        }else{
+            cliZip.setText(getIntent().getStringExtra("cliZip"));
+        }
+
+        if(getIntent().getStringExtra("cliCountry").toString().equals("")){
+            cliCountry.setVisibility(View.GONE);
+        }else{
+            cliCountry.setText(getIntent().getStringExtra("cliCountry"));
+        }
+
         cliPhone.setText(getIntent().getStringExtra("cliPhone"));
-        appointmentId.setText(getIntent().getStringExtra("appointmentId"));
+        appointmentId.setText("Appointment #: " + getIntent().getStringExtra("appointmentId"));
     }
 
     @Override
@@ -126,36 +121,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         double longitude = location.getLongitude();
         LatLng position = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(position).title("You are here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
     }
-
-//
-//    private void getExpenses(){
-//        RequestQueue queue = Volley.newRequestQueue(this);
-//        StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.d("Response", response);
-////                initializeData(response);
-////                initializeAdapter();
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("Error.Response", String.valueOf(error));
-//            }
-//        }){
-//            @Override
-//            protected Map<String,String> getParams(){
-//                Map<String,String> params = new HashMap<String, String>();
-//                params.put("phoneId",mPhoneNumber);
-//                params.put("phoneIdType","1");
-//                params.put("selDate", "02/02/2018");
-//                return params;
-//            }
-//
-//        };
-//        queue.add(sr);
-//    }
-    }
+}
