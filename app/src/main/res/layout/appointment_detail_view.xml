@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blueBI">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="10"
+            android:orientation="horizontal"
+            android:rowCount="4">
+
+            <TextView
+                android:id="@+id/month"
+                android:layout_columnSpan="5"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:gravity="center"
+                android:text="Jun"
+                android:textColor="@color/yellowBI"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_columnSpan="5"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:background="@color/yellowBI"
+                android:gravity="center"
+                android:text="company Name"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/day"
+                android:layout_columnSpan="4"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="@android:color/background_light"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/client_contact"
+                android:layout_height="31dp"
+                android:layout_columnSpan="6"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:background="@color/yellowBI"
+                android:gravity="center"
+                android:text="Client Contact"
+                android:textColor="@color/blueBI"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_columnSpan="4"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:gravity="center"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:text="10:00AM"
+                android:textColor="@color/yellowBI"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/client_phone"
+                android:layout_columnSpan="6"
+                android:layout_gravity="fill"
+                android:layout_rowSpan="2"
+                android:background="@color/yellowBI"
+                android:gravity="center"
+                android:text="Phone #"
+                android:textColor="@color/blueBI"
+                android:textSize="20sp" />
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/appointment_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Appointment Details"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/appointment_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Appointment Id"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_address1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Address 1"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_address2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Address 2 or Apt #"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="State"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="City"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_zip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Zipcode"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/client_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Country"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btn_check_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellowBI"
+            android:text="Check-in"
+            android:textColor="@android:color/black" />
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            tools:context=".DetailActivityView" />
+
+        <Button
+            android:id="@+id/btn_add_expenses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellowBI"
+            android:text="Add Expense" />
+
+        <ListView
+            android:id="@+id/list_view_expenses"
+            android:textColor="@android:color/background_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+</ScrollView>

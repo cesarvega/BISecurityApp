@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    app:cardBackgroundColor="@color/colorPrimaryDark">
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnCount="12"
+        android:orientation="horizontal"
+        android:rowCount="4">
+
+        <TextView
+            android:id="@+id/month"
+            android:layout_columnSpan="3"
+            android:layout_gravity="fill_horizontal"
+            android:layout_rowSpan="2"
+            android:gravity="center"
+            android:paddingTop="5sp"
+            android:textColor="@color/yellowBI"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/company_name"
+            android:layout_columnSpan="7"
+            android:layout_gravity="fill_vertical|fill_horizontal"
+            android:layout_rowSpan="4"
+            android:background="@color/yellowBI"
+            android:gravity="center_vertical"
+            android:paddingStart="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:id="@+id/appointment_icon"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill_vertical"
+            android:layout_rowSpan="4"
+            android:gravity="center"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            app:srcCompat="@android:drawable/ic_dialog_info" />
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_columnSpan="3"
+            android:layout_gravity="fill_horizontal"
+            android:layout_rowSpan="2"
+            android:gravity="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="100dp"
+            android:layout_columnSpan="3"
+            android:layout_gravity="fill_horizontal"
+            android:layout_rowSpan="2"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:textColor="@color/yellowBI"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/client_contact"
+            android:layout_columnSpan="7"
+            android:layout_gravity="fill"
+            android:layout_marginTop="-20sp"
+            android:layout_rowSpan="2"
+            android:background="@color/yellowBI"
+            android:paddingBottom="5sp"
+            android:paddingStart="5sp"
+            android:textColor="@color/blueBI"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/appointment_id"
+            android:layout_columnSpan="2"
+            android:layout_rowSpan="4"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="14sp" />
+
+    </GridLayout>
+
+
+</android.support.v7.widget.CardView>
+
