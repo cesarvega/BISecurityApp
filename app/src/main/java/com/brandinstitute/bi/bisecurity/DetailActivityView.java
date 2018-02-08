@@ -7,6 +7,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     double latitude; // latitude
     double longitude; // longitude
 
+
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
@@ -73,8 +75,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String s = getIntent().getStringExtra("companyName");
-        String ss = getIntent().getStringExtra("clientContact");
+
+        TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+        final String mPhoneNumber = tMgr.getLine1Number();
         setContentView(R.layout.appointment_detail_view);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -127,32 +130,32 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
     }
 
-
-    private void getExpenses(){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Response", response);
-//                initializeData(response);
-//                initializeAdapter();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error.Response", String.valueOf(error));
-            }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("phoneId",mPhoneNumber);
-                params.put("phoneIdType","1");
-                params.put("selDate", "02/02/2018");
-                return params;
-            }
-
-        };
-        queue.add(sr);
-    }
+//
+//    private void getExpenses(){
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d("Response", response);
+////                initializeData(response);
+////                initializeAdapter();
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("Error.Response", String.valueOf(error));
+//            }
+//        }){
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Map<String,String> params = new HashMap<String, String>();
+//                params.put("phoneId",mPhoneNumber);
+//                params.put("phoneIdType","1");
+//                params.put("selDate", "02/02/2018");
+//                return params;
+//            }
+//
+//        };
+//        queue.add(sr);
+//    }
     }
