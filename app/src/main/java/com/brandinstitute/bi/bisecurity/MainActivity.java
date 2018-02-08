@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         AppointmentList items = new AppointmentList();
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        final String mPhoneNumber = tMgr.getLine1Number();
+//        final String mPhoneNumber = tMgr.getLine1Number();
+        final String mPhoneNumber = "15555218135";
 
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("phoneId",mPhoneNumber);
                 params.put("phoneIdType","1");
-                params.put("selDate", "02/02/2018");
+                params.put("selDate", "01/16/2018");
                 return params;
             }
 

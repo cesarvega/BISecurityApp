@@ -27,6 +27,7 @@
 
         <TextView
             android:id="@+id/company_name"
+            android:layout_width="150dp"
             android:layout_columnSpan="7"
             android:layout_gravity="fill_vertical|fill_horizontal"
             android:layout_rowSpan="4"
@@ -72,7 +73,7 @@
             android:id="@+id/client_contact"
             android:layout_columnSpan="7"
             android:layout_gravity="fill"
-            android:layout_marginTop="-20sp"
+            android:layout_marginTop="-15sp"
             android:layout_rowSpan="2"
             android:background="@color/yellowBI"
             android:paddingBottom="5sp"
