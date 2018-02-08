@@ -30,17 +30,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         TextView txtTime;
         ImageView appointmentIcon;
         TextView appointmentId;
-
-//        TextView cliAddress1;
-        TextView cliAddress2;
-        TextView cliCity;
-        TextView cliState;
-        TextView cliZip;
-        TextView cliCountry;
-        TextView cliPhone;
-
-
-
         PersonViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
