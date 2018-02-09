@@ -1,12 +1,21 @@
 package com.brandinstitute.bi.bisecurity;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +26,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -42,13 +57,18 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     TextView appointmentId;
     TextView meetingType;
 
+    TextView txtExpenseDescription;
+    TextView textExpenseAmount;
+    AppCompatImageView imageView;
+
+
     private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String s = getIntent().getStringExtra("companyName");
-        String ss = getIntent().getStringExtra("clientContact");
         setContentView(R.layout.appointment_detail_view);
+
+        this.imageView = (AppCompatImageView)this.findViewById(R.id.expensePhoto);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -69,6 +89,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         cliCountry = (TextView)findViewById(R.id.client_country);
         cliPhone = (TextView)findViewById(R.id.client_phone);
         appointmentId = (TextView)findViewById(R.id.appointment_id);
+        txtExpenseDescription = (TextView)findViewById(R.id.expenseDescription);
+        textExpenseAmount = (TextView)findViewById(R.id.expenseAmount);
 
         companyName.setText(getIntent().getStringExtra("companyName"));
         clientContact.setText(getIntent().getStringExtra("clientContact"));
@@ -123,5 +145,25 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions().position(position).title("You are here"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    public void expensePicture(View view){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(photo);
+        }
+    }
+
+    public void addExpenses(View view){
+        System.out.println("Expense Description: " + txtExpenseDescription.getText());
+        System.out.println("Expense Amount: " + textExpenseAmount.getText());
+        System.out.println("Picture Taken: " + ((BitmapDrawable)imageView.getDrawable()).getBitmap());
     }
 }
