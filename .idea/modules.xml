@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/biandroidsecurity.iml" filepath="$PROJECT_DIR$/biandroidsecurity.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/BiSecurity_original.iml" filepath="$PROJECT_DIR$/BiSecurity_original.iml" />
-      <module fileurl="file://C:\Users\cacevedo\AndroidStudioProjects\biandroidsecurity\BiSecurity_original.iml" filepath="C:\Users\cacevedo\AndroidStudioProjects\biandroidsecurity\BiSecurity_original.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\cacevedo\AndroidStudioProjects\biandroidsecurity\app\app.iml" filepath="C:\Users\cacevedo\AndroidStudioProjects\biandroidsecurity\app\app.iml" />
-      <module fileurl="file://C:\Android_Project\BiSecurity_original\biandroidsecurity.iml" filepath="C:\Android_Project\BiSecurity_original\biandroidsecurity.iml" />
->>>>>>> 45a1da40fd33d389ef26d54f6bccf14079270988
     </modules>
   </component>
 </project>
