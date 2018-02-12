@@ -167,15 +167,14 @@
             android:layout_height="200dp"
             tools:context=".DetailActivityView" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/expensePhoto"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/yellowBI"
-            android:backgroundTint="@color/yellowBI"
+            android:layout_height="215dp"
+            android:layout_marginTop="10dp"
             android:onClick="expensePicture"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_photo_camera_black_24dp" />
+            android:src="@drawable/ic_photo_camera_white_24dp" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

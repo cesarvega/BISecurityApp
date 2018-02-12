@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,7 +60,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
     TextView txtExpenseDescription;
     TextView textExpenseAmount;
-    AppCompatImageView imageView;
+    ImageView imageView;
 
 
     private GoogleMap mMap;
@@ -68,7 +69,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_detail_view);
 
-        this.imageView = (AppCompatImageView)this.findViewById(R.id.expensePhoto);
+        this.imageView = (ImageView)this.findViewById(R.id.expensePhoto);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -148,16 +149,36 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     }
 
     static final int REQUEST_TAKE_PHOTO = 1;
+    Uri file;
 
     public void expensePicture(View view){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        file = Uri.fromFile(getOutputMediaFile());
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
+    private static File getOutputMediaFile(){
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "CameraDemo");
+
+        if (!mediaStorageDir.exists()){
+            if (!mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        return new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_"+ timeStamp + ".jpg");
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                imageView.setImageURI(file);
+            }
         }
     }
 
