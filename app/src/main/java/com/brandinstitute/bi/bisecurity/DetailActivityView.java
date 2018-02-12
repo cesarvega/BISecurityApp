@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,8 +18,11 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,7 +37,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -40,6 +47,9 @@ import java.util.Date;
  */
 
 public class DetailActivityView extends FragmentActivity implements OnMapReadyCallback {
+
+
+    private RecyclerView lvExpenses;
 
     TextView txtMonth;
     TextView txtDay;
@@ -59,7 +69,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     TextView meetingType;
 
     TextView txtExpenseDescription;
-    TextView textExpenseAmount;
+    TextView txtExpenseAmount;
     ImageView imageView;
 
 
@@ -91,7 +101,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         cliPhone = (TextView)findViewById(R.id.client_phone);
         appointmentId = (TextView)findViewById(R.id.appointment_id);
         txtExpenseDescription = (TextView)findViewById(R.id.expenseDescription);
-        textExpenseAmount = (TextView)findViewById(R.id.expenseAmount);
+        txtExpenseAmount = (TextView)findViewById(R.id.expenseAmount);
 
         companyName.setText(getIntent().getStringExtra("companyName"));
         clientContact.setText(getIntent().getStringExtra("clientContact"));
@@ -131,20 +141,44 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
         cliPhone.setText(getIntent().getStringExtra("cliPhone"));
         appointmentId.setText("Appointment #: " + getIntent().getStringExtra("appointmentId"));
+
+
+
+        lvExpenses= (RecyclerView) findViewById(R.id.list_view_expenses);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        lvExpenses.setLayoutManager(llm);
+        lvExpenses.setHasFixedSize(true);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LocationManager locationManager = (LocationManager) this
-                .getSystemService(LOCATION_SERVICE);
-        Location location = locationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng position = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(position).title("You are here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+//        LocationManager locationManager = (LocationManager) this
+//                .getSystemService(LOCATION_SERVICE);
+//        Location location = locationManager
+//                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+
+        try {
+            String searchForAddress = cliAddress1.getText().toString() + ", " + cliCity.getText().toString() + ", " + cliState.getText().toString();
+
+            address = coder.getFromLocationName(searchForAddress, 5);
+            Address locationAddress = address.get(0);
+
+//            double latitude = location.getLatitude();
+//            double longitude = location.getLongitude();
+
+            LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(position).title("Appointment Location"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
 
     }
 
@@ -184,7 +218,26 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
     public void addExpenses(View view){
         System.out.println("Expense Description: " + txtExpenseDescription.getText());
-        System.out.println("Expense Amount: " + textExpenseAmount.getText());
+        System.out.println("Expense Amount: " + txtExpenseAmount.getText());
         System.out.println("Picture Taken: " + ((BitmapDrawable)imageView.getDrawable()).getBitmap());
+
+        initializeData("send");
+        initializeAdapter();
+    }
+
+    private ArrayList expenses = new ArrayList<>();
+    private void initializeData(String response){
+//        expenses.clear();
+
+        expenses.add(new ExpenseList(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(),file.getPath().toString()));
+
+        txtExpenseDescription.setText("");
+        txtExpenseAmount.setText("");
+        imageView.setImageResource(R.drawable.ic_photo_camera_white_24dp);
+    }
+
+    private void initializeAdapter(){
+        ExpenseListAdapter adapter = new ExpenseListAdapter(expenses);
+        lvExpenses.setAdapter(adapter);
     }
 }

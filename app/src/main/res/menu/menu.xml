@@ -7,7 +7,6 @@
         android:id="@+id/date"
         android:icon="@drawable/ic_date_range_white_24dp"
         android:title="calendar"
-        app:showAsAction="always"
-        android:theme="@style/datePickerTheme"/>
+        app:showAsAction="always"/>
 
 </menu>

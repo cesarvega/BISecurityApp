@@ -8,14 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
+    <!-- DatePicker Dialog Theme. -->
     <style name="datePickerTheme" parent="android:Theme.DeviceDefault.Light">
         <item name="android:backgroundTint">@color/blueBI</item>
         <item name="android:textColorPrimary">@color/whiteBI</item>
         <item name="android:textColorSecondary">@color/whiteBI</item>
         <item name="android:textColor">@color/whiteBI</item>
     </style>
-
-
-
 </resources>

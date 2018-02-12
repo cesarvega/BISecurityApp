@@ -260,11 +260,13 @@
             android:onClick="addExpenses"
             android:text="Add Expense" />
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/list_view_expenses"
-            android:textColor="@android:color/background_light"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/background_light">
+
+        </android.support.v7.widget.RecyclerView>
 
 
     </LinearLayout>

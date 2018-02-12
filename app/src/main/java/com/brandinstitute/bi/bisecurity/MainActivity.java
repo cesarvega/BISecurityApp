@@ -54,10 +54,16 @@ public class MainActivity extends AppCompatActivity {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context, 0, alarm, 0);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1000 * 60 * 3, pendingIntent); // 30 sec
-
         }
 
         AppointmentList items = new AppointmentList();
+
+        final Calendar c = Calendar.getInstance();
+        final int currentYear = c.get(Calendar.YEAR);
+        final int currentMonth = c.get(Calendar.MONTH);
+        final int currentDay = c.get(Calendar.DAY_OF_MONTH);
+
+        getAppointmentsHelper(currentMonth, currentDay, currentYear);
 
         rv=(RecyclerView)findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
@@ -89,54 +95,13 @@ public class MainActivity extends AppCompatActivity {
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            selectedDate = monthOfYear+1 + "/" + dayOfMonth + "/" + year;
-
-                            TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-                            //        final String mPhoneNumber = tMgr.getLine1Number();
-                            final String mPhoneNumber = "15555218135";
-
-                            RequestQueue queue = Volley.newRequestQueue(context);
-                            StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    Log.d("Response", response);
-                                    initializeData(response);
-                                    initializeAdapter();
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.d("Error.Response", String.valueOf(error));
-                                }
-                            }){
-                                @Override
-                                protected Map<String,String> getParams(){
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("phoneId",mPhoneNumber);
-                                    params.put("phoneIdType","1");
-                                    params.put("selDate", selectedDate);
-                                    return params;
-                                }
-
-                            };
-                            queue.add(sr);
+                            getAppointmentsHelper(monthOfYear, dayOfMonth, year);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
-
-//    public void checkAppointment(View v) {
-//        Intent intent = new Intent(MainActivity.this, DetailActivityView.class);
-//        intent.putExtra("appointmentInfo", "cesar");
-//        startActivity(intent);
-//    }
 
     private void initializeData(String response){
         appointments.clear();
@@ -155,5 +120,39 @@ public class MainActivity extends AppCompatActivity {
     private void initializeAdapter(){
         RVAdapter adapter = new RVAdapter(appointments);
         rv.setAdapter(adapter);
+    }
+
+    private void getAppointmentsHelper(int month, int day, int year){
+        selectedDate = month+1 + "/" + day + "/" + year;
+
+        TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        final String mPhoneNumber = tMgr.getLine1Number();
+//        final String mPhoneNumber = "15555218135";
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response", response);
+                initializeData(response);
+                initializeAdapter();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error.Response", String.valueOf(error));
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("phoneId",mPhoneNumber);
+                params.put("phoneIdType","1");
+                params.put("selDate", selectedDate);
+                return params;
+            }
+
+        };
+        queue.add(sr);
     }
 }
