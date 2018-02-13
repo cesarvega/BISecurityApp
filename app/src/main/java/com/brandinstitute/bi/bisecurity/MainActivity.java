@@ -1,6 +1,7 @@
 package com.brandinstitute.bi.bisecurity;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             final int mDay = c.get(Calendar.DAY_OF_MONTH);
 
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerTheme,
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,  R.style.datePickerTheme,
                     new DatePickerDialog.OnDateSetListener() {
 
                         @Override
