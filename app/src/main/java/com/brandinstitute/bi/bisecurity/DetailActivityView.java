@@ -2,7 +2,9 @@ package com.brandinstitute.bi.bisecurity;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -20,9 +22,11 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -71,6 +75,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     TextView txtExpenseDescription;
     TextView txtExpenseAmount;
     ImageView imageView;
+    Spinner selectedSpinnerOption;
 
 
     private GoogleMap mMap;
@@ -78,8 +83,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_detail_view);
-
-        this.imageView = (ImageView)this.findViewById(R.id.expensePhoto);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -100,8 +103,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         cliCountry = (TextView)findViewById(R.id.client_country);
         cliPhone = (TextView)findViewById(R.id.client_phone);
         appointmentId = (TextView)findViewById(R.id.appointment_id);
-        txtExpenseDescription = (TextView)findViewById(R.id.expenseDescription);
-        txtExpenseAmount = (TextView)findViewById(R.id.expenseAmount);
 
         companyName.setText(getIntent().getStringExtra("companyName"));
         clientContact.setText(getIntent().getStringExtra("clientContact"));
@@ -153,11 +154,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//        LocationManager locationManager = (LocationManager) this
-//                .getSystemService(LOCATION_SERVICE);
-//        Location location = locationManager
-//                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
 
         Geocoder coder = new Geocoder(this);
         List<Address> address;
@@ -167,9 +163,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
             address = coder.getFromLocationName(searchForAddress, 5);
             Address locationAddress = address.get(0);
-
-//            double latitude = location.getLatitude();
-//            double longitude = location.getLongitude();
 
             LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
             mMap.addMarker(new MarkerOptions().position(position).title("Appointment Location"));
@@ -185,13 +178,13 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     static final int REQUEST_TAKE_PHOTO = 1;
     Uri file;
 
-    public void expensePicture(View view){
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFile());
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-
-        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-    }
+//    public void expensePicture(View view){
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        file = Uri.fromFile(getOutputMediaFile());
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+//
+//        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+//    }
 
     private static File getOutputMediaFile(){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -211,25 +204,53 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
+
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View promptView = layoutInflater.inflate(R.layout.add_expense_view, null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.spinnerTheme);
+                alertDialogBuilder.setView(promptView);
+
+                this.imageView = (ImageView)promptView.findViewById(R.id.expensePhoto);
+                txtExpenseDescription = (TextView)promptView.findViewById(R.id.expenseDescription);
+                txtExpenseAmount = (TextView)promptView.findViewById(R.id.expenseAmount);
+                selectedSpinnerOption = (Spinner) promptView.findViewById(R.id.selectionExpenseType);
                 imageView.setImageURI(file);
+
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                initializeData("send");
+                                initializeAdapter();
+
+                                dialog.cancel();
+                            }
+                        })
+
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                // create an alert dialog
+                AlertDialog alert = alertDialogBuilder.create();
+                alert.show();
             }
         }
     }
 
     public void addExpenses(View view){
-        System.out.println("Expense Description: " + txtExpenseDescription.getText());
-        System.out.println("Expense Amount: " + txtExpenseAmount.getText());
-        System.out.println("Picture Taken: " + ((BitmapDrawable)imageView.getDrawable()).getBitmap());
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        file = Uri.fromFile(getOutputMediaFile());
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
 
-        initializeData("send");
-        initializeAdapter();
+        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
     private ArrayList expenses = new ArrayList<>();
     private void initializeData(String response){
-//        expenses.clear();
-
-        expenses.add(new ExpenseList(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(),file.getPath().toString()));
+        expenses.add(new ExpenseList(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString(), file.getPath().toString()));
 
         txtExpenseDescription.setText("");
         txtExpenseAmount.setText("");

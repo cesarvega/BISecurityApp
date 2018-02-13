@@ -88,12 +88,7 @@ public class MainActivity extends AppCompatActivity {
             final int mMonth = c.get(Calendar.MONTH);
             final int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
-<<<<<<< HEAD
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_DeviceDefault_Dialog,
-=======
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,  R.style.datePickerTheme,
->>>>>>> a1e1d7e9e7d2f4773a9392d05bb8c345133a613e
                     new DatePickerDialog.OnDateSetListener() {
 
                         @Override

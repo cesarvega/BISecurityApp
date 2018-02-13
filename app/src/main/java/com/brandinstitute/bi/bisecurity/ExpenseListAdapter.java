@@ -22,6 +22,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         ConstraintLayout el;
         ImageView expensePicture;
         TextView txtDescription;
+        TextView txtSpenseType;
         TextView txtAmount;
 
         ExpenseViewHolder(View itemView) {
@@ -37,6 +38,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                     return false;
                 }
             });
+            txtSpenseType = (TextView)itemView.findViewById(R.id.txt_spense_type);
             txtAmount = (TextView)itemView.findViewById(R.id.text_amount);
         }
     }
@@ -64,7 +66,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
 //        expenseViewHolder.expensePicture.setImageResource(R.drawable.ic_info_white_24dp);
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
-
+        expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
         expenseViewHolder.txtDescription.setText(expenses.get(i).description);
         expenseViewHolder.txtAmount.setText(expenses.get(i).amount);
     }

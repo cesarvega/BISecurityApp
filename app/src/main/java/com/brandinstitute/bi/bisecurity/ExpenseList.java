@@ -21,6 +21,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class ExpenseList {
     String description;
     String amount;
+    String expenseType;
     String expensePhoto;
 
 
@@ -28,9 +29,10 @@ public class ExpenseList {
         super();
     }
 
-    public ExpenseList(String description, String amount, String picture){
+    public ExpenseList(String description, String amount, String expenseType, String picture){
         this.description = description;
         this.amount = amount;
+        this.expenseType = expenseType;
         this.expensePhoto = picture;
     }
 }
