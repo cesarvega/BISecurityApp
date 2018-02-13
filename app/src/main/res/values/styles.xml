@@ -9,10 +9,21 @@
     </style>
 
     <!-- DatePicker Dialog Theme. -->
-    <style name="datePickerTheme" parent="android:Theme.DeviceDefault.Light">
+    <style name="datePickerTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:backgroundTint">@color/blueBI</item>
         <item name="android:textColorPrimary">@color/whiteBI</item>
         <item name="android:textColorSecondary">@color/whiteBI</item>
-        <item name="android:textColor">@color/whiteBI</item>
+        <item name="android:colorControlActivated">@color/yellowDarkBI</item>
+        <item name="android:textColor">@color/yellowBI</item>
+        <item name="android:layout_gravity">center</item>
     </style>
+
+    <!--<style name="datePickerTheme" parent="@style/Theme.AppCompat.Light">-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <!--<item name="windowActionBar">false</item>-->
+    <!--</style>-->
 </resources>
