@@ -41,7 +41,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private Context context;
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
-    private String phoneId;
     private String phoneIdType;
     private String appid;
     private String recType;
@@ -50,13 +49,17 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String img;
     private String imgString;
     private String amount;
-    private String description;
+//    private String description;
     private String expenseType;
+    //    TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+//    private String phoneId = tMgr.getLine1Number();
+//    private String phoneId = "15555218135";
+    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout el;
         ImageView expensePicture;
-        TextView txtDescription;
+//        TextView txtDescription;
         TextView txtSpenseType;
         TextView txtAmount;
 
@@ -65,15 +68,15 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             super(itemView);
             el = (ConstraintLayout)itemView.findViewById(R.id.el);
             expensePicture = (ImageView)itemView.findViewById(R.id.expense_picture);
-            txtDescription = (TextView)itemView.findViewById(R.id.text_description);
-            txtDescription.setKeyListener(null);
-            txtDescription.setOnTouchListener(new View.OnTouchListener(){
-                public boolean onTouch(View v, MotionEvent event) {
-                    // Disallow the touch request for parent scroll on touch of child view
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    return false;
-                }
-            });
+//            txtDescription = (TextView)itemView.findViewById(R.id.text_description);
+//            txtDescription.setKeyListener(null);
+//            txtDescription.setOnTouchListener(new View.OnTouchListener(){
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    // Disallow the touch request for parent scroll on touch of child view
+//                    v.getParent().requestDisallowInterceptTouchEvent(true);
+//                    return false;
+//                }
+//            });
             txtSpenseType = (TextView)itemView.findViewById(R.id.txt_spense_type);
             txtAmount = (TextView)itemView.findViewById(R.id.text_amount);
         }
@@ -104,12 +107,12 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
         this.imgString = getStringImage(expenses.get(i).expensePhoto);
         amount =  expenses.get(i).amount;
-        description = expenses.get(i).description;
+//        description = expenses.get(i).description;
         expenseType =expenses.get(i).expenseType;
 
         progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Uploading, please wait...");
-        progressDialog.show();
+//        progressDialog.setMessage("Uploading, please wait...");
+//        progressDialog.show();
         //sending image to server
         StringRequest request = new StringRequest(Request.Method.POST, "https://tools.brandinstitute.com/wsbi/bimobile.asmx/addAppReceiptString", new Response.Listener<String>(){
             @Override
@@ -127,13 +130,13 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             //adding parameters to send
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                phoneId = (String) ((DetailActivityView) context).cliPhone.getText();
                 phoneIdType ="1";
-                appid =(String) ((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length());
+                appid =((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length()).toString();
                 recType = expenseType;
                 recTotal = amount;
                 imgType = "base64";
                 img = imgString;
+
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("phoneId",phoneId);
                 parameters.put("phoneIdType",phoneIdType);
@@ -150,7 +153,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         rQueue.add(request);
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
         expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
-        expenseViewHolder.txtDescription.setText(expenses.get(i).description);
+//        expenseViewHolder.txtDescription.setText(expenses.get(i).description);
         expenseViewHolder.txtAmount.setText(expenses.get(i).amount);
     }
 
