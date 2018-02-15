@@ -51,8 +51,7 @@ import java.util.List;
  */
 
 public class DetailActivityView extends FragmentActivity implements OnMapReadyCallback {
-
-
+    private Context context;
     private RecyclerView lvExpenses;
 
     TextView txtMonth;
@@ -76,14 +75,14 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     TextView txtExpenseAmount;
     ImageView imageView;
     Spinner selectedSpinnerOption;
-
+    private ArrayList expenses = new ArrayList<>();
 
     private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_detail_view);
-
+        this.context = this;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -248,7 +247,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
-    private ArrayList expenses = new ArrayList<>();
     private void initializeData(String response){
         expenses.add(new ExpenseList(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString(), file.getPath().toString()));
 
@@ -258,7 +256,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     }
 
     private void initializeAdapter(){
-        ExpenseListAdapter adapter = new ExpenseListAdapter(expenses);
+        ExpenseListAdapter adapter = new ExpenseListAdapter(expenses,   this.context);
         lvExpenses.setAdapter(adapter);
     }
 }
