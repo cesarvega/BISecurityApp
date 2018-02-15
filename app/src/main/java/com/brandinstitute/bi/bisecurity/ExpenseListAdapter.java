@@ -37,7 +37,6 @@ import java.util.Map;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
-
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder> {
     private Context context;
     private Bitmap bitmap;
@@ -82,9 +81,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
     List<ExpenseList> expenses;
 
-    ExpenseListAdapter(List<ExpenseList> expenses,   Context context){
+    ExpenseListAdapter(List<ExpenseList> expenses, Context context){
         this.context = context;
         this.expenses = expenses;
+        this.context = context;
     }
 
     @Override
