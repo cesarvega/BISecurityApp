@@ -48,8 +48,12 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String recType;
     private String recTotal;
     private String imgType;
-    private String imgString;
     private String img;
+    private String imgString;
+    private String amount;
+    private String description;
+    private String expenseType;
+
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout el;
         ImageView expensePicture;
@@ -99,6 +103,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     public void onBindViewHolder(ExpenseViewHolder expenseViewHolder, int i) {
 
         this.imgString = getStringImage(expenses.get(i).expensePhoto);
+        amount =  expenses.get(i).amount;
+        description = expenses.get(i).description;
+        expenseType =expenses.get(i).expenseType;
+
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Uploading, please wait...");
         progressDialog.show();
@@ -107,12 +115,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             @Override
             public void onResponse(String s) {
                 progressDialog.dismiss();
-                if(s.equals("true")){
                     Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(context, "Some error occurred!", Toast.LENGTH_LONG).show();
-                }
             }
         },new Response.ErrorListener(){
             @Override
@@ -124,15 +127,13 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             //adding parameters to send
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
-                phoneId ="3057427989";
+                phoneId = (String) ((DetailActivityView) context).cliPhone.getText();
                 phoneIdType ="1";
-                appid ="123";
-                recType ="1";
-                recTotal ="14";
-                imgType ="base64";
+                appid =(String) ((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length());
+                recType = expenseType;
+                recTotal = amount;
+                imgType = "base64";
                 img = imgString;
-
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("phoneId",phoneId);
                 parameters.put("phoneIdType",phoneIdType);
@@ -147,8 +148,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
         RequestQueue rQueue = Volley.newRequestQueue(context);
         rQueue.add(request);
-
-//        expenseViewHolder.expensePicture.setImageResource(R.drawable.ic_info_white_24dp);
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
         expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
         expenseViewHolder.txtDescription.setText(expenses.get(i).description);

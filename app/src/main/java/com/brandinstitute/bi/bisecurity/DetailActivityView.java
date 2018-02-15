@@ -3,6 +3,7 @@ package com.brandinstitute.bi.bisecurity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,13 +23,23 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
+import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,14 +48,25 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+
+import static java.lang.System.in;
 
 /**
  * Created by cvega on 2/5/2018.
@@ -78,6 +100,12 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private ArrayList expenses = new ArrayList<>();
 
     private GoogleMap mMap;
+
+    private ProgressDialog progressDialog;
+    private String phoneId;
+    private String phoneIdType;
+    private String appid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +114,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
         companyName = (TextView)findViewById(R.id.company_name);
         clientContact = (TextView)findViewById(R.id.client_contact);
         txtMonth = (TextView)findViewById(R.id.month);
@@ -141,13 +166,11 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
         cliPhone.setText(getIntent().getStringExtra("cliPhone"));
         appointmentId.setText("Appointment #: " + getIntent().getStringExtra("appointmentId"));
-
-
-
         lvExpenses= (RecyclerView) findViewById(R.id.list_view_expenses);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         lvExpenses.setLayoutManager(llm);
         lvExpenses.setHasFixedSize(true);
+        getExpenses();
     }
 
     @Override
@@ -176,14 +199,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
     static final int REQUEST_TAKE_PHOTO = 1;
     Uri file;
-
-//    public void expensePicture(View view){
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        file = Uri.fromFile(getOutputMediaFile());
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-//
-//        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-//    }
 
     private static File getOutputMediaFile(){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -219,14 +234,11 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
                                 initializeData("send");
                                 initializeAdapter();
-
                                 dialog.cancel();
                             }
                         })
-
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -259,4 +271,54 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         ExpenseListAdapter adapter = new ExpenseListAdapter(expenses,   this.context);
         lvExpenses.setAdapter(adapter);
     }
+
+    private void getExpenses(){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Uploading, please wait...");
+        progressDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, "https://tools.brandinstitute.com/wsbi/bimobile.asmx/getExpensesByAppointmentId", new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Expenses arrived", Toast.LENGTH_LONG).show();
+                try {
+                    JSONArray arr = new JSONArray(s);
+                    for (int i=0; i<arr.length(); i++){
+                        arr.getJSONObject(i).get("appId");
+                        arr.getJSONObject(i).get("recType");
+                        arr.getJSONObject(i).get("recTotal");
+                        arr.getJSONObject(i).get("imgType");
+                        byte[] bitArrayResult = Base64.decode( arr.getJSONObject(i).get("img").toString(), Base64.DEFAULT);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Expense data error -> "+volleyError, Toast.LENGTH_LONG).show();
+            }
+        }) {
+            //adding parameters to send
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                phoneId = (String) ((DetailActivityView) context).cliPhone.getText();
+                phoneIdType ="1";
+                appid =(String) ((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length());
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("phoneId","3057427989");
+                parameters.put("phoneIdType",phoneIdType);
+                parameters.put("appid","1234");
+                return parameters;
+            }
+        };
+
+        RequestQueue rQueue = Volley.newRequestQueue(context);
+        rQueue.add(request);
+    }
+
+
 }
