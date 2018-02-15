@@ -37,6 +37,7 @@ import java.util.Map;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
+
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder> {
     private Context context;
     private Bitmap bitmap;
@@ -47,7 +48,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String recType;
     private String recTotal;
     private String imgType;
-    private String img;
     private String imgString;
     private String amount;
     private String description;
@@ -81,10 +81,9 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
     List<ExpenseList> expenses;
 
-    ExpenseListAdapter(List<ExpenseList> expenses, Context context){
+    ExpenseListAdapter(List<ExpenseList> expenses,   Context context){
         this.context = context;
         this.expenses = expenses;
-        this.context = context;
     }
 
     @Override
@@ -127,13 +126,15 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             //adding parameters to send
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                phoneId = (String) ((DetailActivityView) context).cliPhone.getText();
+
+                phoneId ="3057427989";
                 phoneIdType ="1";
-                appid =(String) ((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length());
+                appid ="123";
                 recType = expenseType;
-                recTotal = amount;
+                recTotal = "14";
                 imgType = "base64";
-                img = imgString;
+//                img = imgString;
+
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("phoneId",phoneId);
                 parameters.put("phoneIdType",phoneIdType);
@@ -141,13 +142,15 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 parameters.put("recType",recType);
                 parameters.put("recTotal",recTotal);
                 parameters.put("imgType",imgType);
-                parameters.put("img",img);
+                parameters.put("img",imgString);
                 return parameters;
             }
         };
 
         RequestQueue rQueue = Volley.newRequestQueue(context);
         rQueue.add(request);
+
+//        expenseViewHolder.expensePicture.setImageResource(R.drawable.ic_info_white_24dp);
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
         expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
         expenseViewHolder.txtDescription.setText(expenses.get(i).description);
