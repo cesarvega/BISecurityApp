@@ -108,15 +108,16 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private ProgressDialog progressDialog;
     private String appid;
     private String phoneIdType;
-//    TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//    private String phoneId = tMgr.getLine1Number();
-        private String phoneId = "15555218135";
+    private String phoneId;
+//        private String phoneId = "15555218135";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
+        TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        phoneId = tMgr.getLine1Number();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

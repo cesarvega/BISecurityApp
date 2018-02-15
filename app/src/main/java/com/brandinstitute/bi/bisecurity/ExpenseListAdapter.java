@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -51,10 +52,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String amount;
 //    private String description;
     private String expenseType;
-    //    TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//    private String phoneId = tMgr.getLine1Number();
+    private String phoneId;
+
 //    private String phoneId = "15555218135";
-    private String phoneId = "3057427989";
+//    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout el;
@@ -88,6 +89,8 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         this.context = context;
         this.expenses = expenses;
         this.context = context;
+        TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        phoneId = tMgr.getLine1Number();
     }
 
     @Override
