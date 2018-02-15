@@ -1,5 +1,6 @@
 package com.brandinstitute.bi.bisecurity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
@@ -17,6 +18,8 @@ import java.util.List;
 
 
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder> {
+
+    private Context context;
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout el;
@@ -45,8 +48,9 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
     List<ExpenseList> expenses;
 
-    ExpenseListAdapter(List<ExpenseList> expenses){
+    ExpenseListAdapter(List<ExpenseList> expenses, Context context){
         this.expenses = expenses;
+        this.context = context;
     }
 
     @Override
