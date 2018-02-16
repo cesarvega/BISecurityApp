@@ -109,8 +109,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private ProgressDialog progressDialog;
     private String appid;
     private String phoneIdType;
-//    private String phoneId;
-        private String phoneId = "15555218135";
+    private String phoneId;
+//        private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
 
     @Override
@@ -119,7 +119,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        phoneId = tMgr.getLine1Number();
+        phoneId = tMgr.getLine1Number();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -230,15 +230,16 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
                 View promptView = layoutInflater.inflate(R.layout.add_expense_view, null);
+                promptView.setMinimumHeight(200);
+
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.spinnerTheme);
                 alertDialogBuilder.setView(promptView);
-
                 this.imageView = (ImageView)promptView.findViewById(R.id.expensePhoto);
+                this.imageView.setRotation(90);
 //                txtExpenseDescription = (TextView)promptView.findViewById(R.id.expenseDescription);
                 txtExpenseAmount = (TextView)promptView.findViewById(R.id.expenseAmount);
                 selectedSpinnerOption = (Spinner) promptView.findViewById(R.id.selectionExpenseType);
                 imageView.setImageURI(file);
-
 
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -265,7 +266,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-
+//        cameraIntent.
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 

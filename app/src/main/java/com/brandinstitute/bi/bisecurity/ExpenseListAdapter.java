@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
@@ -32,6 +34,7 @@ import com.google.gson.internal.bind.ObjectTypeAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,10 +56,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String amount;
 //    private String description;
     private String expenseType;
-//    private String phoneId;
+    private String phoneId;
    private String img;
 
-    private String phoneId = "15555218135";
+//    private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
@@ -71,6 +74,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             super(itemView);
             el = (ConstraintLayout)itemView.findViewById(R.id.el);
             expensePicture = (ImageView)itemView.findViewById(R.id.expense_picture);
+            expensePicture.setRotation(90);
 //            txtDescription = (TextView)itemView.findViewById(R.id.text_description);
 //            txtDescription.setKeyListener(null);
 //            txtDescription.setOnTouchListener(new View.OnTouchListener(){
@@ -126,7 +130,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 public void onResponse(String s) {
                     progressDialog.dismiss();
                     Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
-
                 }
             },new Response.ErrorListener(){
                 @Override
@@ -175,17 +178,15 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     }
 
     public String getStringImage(String path) {
-
-            // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(path, o);
 
             // The new size we want to scale to
-            final int REQUIRED_SIZE=70;
+            final int REQUIRED_SIZE=150;
 
             // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
+            int scale = 8;
             while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
                     o.outHeight / scale / 2 >= REQUIRED_SIZE) {
                 scale *= 2;
@@ -199,5 +200,12 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
             return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 }
