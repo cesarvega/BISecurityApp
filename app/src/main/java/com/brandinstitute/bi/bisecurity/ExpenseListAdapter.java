@@ -33,12 +33,14 @@ import com.google.gson.internal.bind.ObjectTypeAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
+
 
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder> {
     private Context context;
@@ -49,14 +51,14 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String recType;
     private String recTotal;
     private String imgType;
-    private String img;
     private String imgString;
     private String amount;
 //    private String description;
     private String expenseType;
-//    private String phoneId;
+    private String phoneId;
+   private String img;
 
-    private String phoneId = "15555218135";
+//    private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
@@ -71,6 +73,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             super(itemView);
             el = (ConstraintLayout)itemView.findViewById(R.id.el);
             expensePicture = (ImageView)itemView.findViewById(R.id.expense_picture);
+            expensePicture.setRotation(90);
 //            txtDescription = (TextView)itemView.findViewById(R.id.text_description);
 //            txtDescription.setKeyListener(null);
 //            txtDescription.setOnTouchListener(new View.OnTouchListener(){
@@ -87,12 +90,13 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
     List<ExpenseList> expenses;
 
-    ExpenseListAdapter(List<ExpenseList> expenses, Context context){
+    ExpenseListAdapter(List<ExpenseList> expenses,   Context context){
         this.context = context;
         this.expenses = expenses;
         this.context = context;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        phoneId = tMgr.getLine1Number();
+        phoneId = tMgr.getLine1Number();
+
     }
 
     @Override
@@ -161,6 +165,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             rQueue.add(request);
         }
 
+
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
         expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
 //        expenseViewHolder.txtDescription.setText(expenses.get(i).description);
@@ -172,37 +177,35 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         super.onAttachedToRecyclerView(expenseListView);
     }
 
-//    public String getStringImage(String path) {
-//
-//            // Decode image size
-//            BitmapFactory.Options o = new BitmapFactory.Options();
-//            o.inJustDecodeBounds = true;
-//            BitmapFactory.decodeFile(path, o);
-//
-//            // The new size we want to scale to
-//            final int REQUIRED_SIZE=70;
-//
-//            // Find the correct scale value. It should be the power of 2.
-//            int scale = 1;
-//            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-//                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-//                scale *= 2;
-//            }
-//
-//            // Decode with inSampleSize
-//            BitmapFactory.Options o2 = new BitmapFactory.Options();
-//            o2.inSampleSize = scale;
-//            Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
-//
-//            Matrix matrix = new Matrix();
-//            matrix.postRotate(90);
-//            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//
-//
-//
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//            byte[] b = baos.toByteArray();
-//            return Base64.encodeToString(b, Base64.DEFAULT);
-//    }
+    public String getStringImage(String path) {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, o);
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=150;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 8;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 }

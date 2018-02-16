@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivityView"
+            android:screenOrientation="portrait"
             android:hardwareAccelerated="true"></activity>
         <service android:name=".BackgroundService" >
             <intent-filter>
@@ -39,7 +40,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED">
                 </action>
-
             </intent-filter>
         </receiver>
     </application>

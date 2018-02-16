@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/expensePhoto"
@@ -16,40 +16,40 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--<TextView-->
-        <!--android:id="@+id/txtDescription"-->
-        <!--android:layout_width="96dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="48dp"-->
-        <!--android:text="Description:"-->
-        <!--android:textColor="@color/whiteBI"-->
-        <!--android:textSize="18sp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/guideline" />-->
+    <!--android:id="@+id/txtDescription"-->
+    <!--android:layout_width="96dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginTop="48dp"-->
+    <!--android:text="Description:"-->
+    <!--android:textColor="@color/whiteBI"-->
+    <!--android:textSize="18sp"-->
+    <!--app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="@+id/guideline" />-->
 
     <!--<EditText-->
-        <!--android:id="@+id/expenseDescription"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginEnd="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_marginStart="26dp"-->
-        <!--android:layout_marginTop="40dp"-->
-        <!--android:backgroundTint="@color/whiteBI"-->
-        <!--android:ems="10"-->
-        <!--android:maxLines="4"-->
-        <!--android:textColor="@color/whiteBI"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/txtDescription"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/guideline" />-->
+    <!--android:id="@+id/expenseDescription"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginStart="26dp"-->
+    <!--android:layout_marginTop="40dp"-->
+    <!--android:backgroundTint="@color/whiteBI"-->
+    <!--android:ems="10"-->
+    <!--android:maxLines="4"-->
+    <!--android:textColor="@color/whiteBI"-->
+    <!--app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_bias="0.0"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/txtDescription"-->
+    <!--app:layout_constraintTop_toTopOf="@+id/guideline" />-->
 
 
     <TextView
@@ -75,6 +75,8 @@
         android:layout_marginStart="26dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/whiteBI"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
         android:ems="10"
         android:textColor="@color/whiteBI"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,11 +86,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <!--<android.support.constraint.Guideline-->
-        <!--android:id="@+id/guideline"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--app:layout_constraintGuide_begin="230dp" />-->
+    <!--android:id="@+id/guideline"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal"-->
+    <!--app:layout_constraintGuide_begin="230dp" />-->
 
     <TextView
         android:id="@+id/expenseType"

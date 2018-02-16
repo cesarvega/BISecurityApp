@@ -65,6 +65,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -111,8 +112,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private ProgressDialog progressDialog;
     private String appid;
     private String phoneIdType;
-//    private String phoneId;
-        private String phoneId = "15555218135";
+    private String phoneId;
+//        private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
 
     private String imageString;
@@ -123,7 +124,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        phoneId = tMgr.getLine1Number();
+        phoneId = tMgr.getLine1Number();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -234,21 +235,22 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
                 View promptView = layoutInflater.inflate(R.layout.add_expense_view, null);
+                promptView.setMinimumHeight(200);
+
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.spinnerTheme);
                 alertDialogBuilder.setView(promptView);
-
                 this.imageView = (ImageView)promptView.findViewById(R.id.expensePhoto);
+                this.imageView.setRotation(90);
 //                txtExpenseDescription = (TextView)promptView.findViewById(R.id.expenseDescription);
                 txtExpenseAmount = (TextView)promptView.findViewById(R.id.expenseAmount);
                 selectedSpinnerOption = (Spinner) promptView.findViewById(R.id.selectionExpenseType);
                 imageView.setImageURI(file);
 
-
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                initializeData("", txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), imageString, "saveToDataBase");
-//                                initializeData(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString());
+                                initializeData("", txtExpenseAmount.getText().toString(),
+                                        selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString(), "saveToDataBase");
                                 initializeAdapter();
                                 dialog.cancel();
                             }
@@ -269,8 +271,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        imageString = getStringImage(file.getPath());
-
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
@@ -341,6 +341,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 Toast.makeText(context, "Expenses arrived", Toast.LENGTH_LONG).show();
                 try {
                     JSONArray arr = new JSONArray(s);
+                    expenses.clear();
                     for (int i=0; i<arr.length(); i++){
                         arr.getJSONObject(i).get("appId");
                         arr.getJSONObject(i).get("imgType");
