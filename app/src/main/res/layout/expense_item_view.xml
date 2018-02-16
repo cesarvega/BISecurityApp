@@ -19,44 +19,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal_background" />
 
-    <TextView
-        android:id="@+id/description_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="8dp"
-        android:text="Description:"
-        android:textColor="@color/whiteBI"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.32"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+    <!--<TextView-->
+        <!--android:id="@+id/description_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:text="Description:"-->
+        <!--android:textColor="@color/whiteBI"-->
+        <!--android:textSize="18sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/guideline3"-->
+        <!--app:layout_constraintHorizontal_bias="0.32"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/guideline2" />-->
 
-    <EditText
-        android:id="@+id/text_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:backgroundTint="@color/blueBI"
-        android:cursorVisible="false"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:maxLines="4"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-        android:textColor="@color/whiteBI"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+    <!--<EditText-->
+        <!--android:id="@+id/text_description"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:backgroundTint="@color/blueBI"-->
+        <!--android:cursorVisible="false"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:maxLines="4"-->
+        <!--android:overScrollMode="always"-->
+        <!--android:scrollbarStyle="insideInset"-->
+        <!--android:scrollbars="vertical"-->
+        <!--android:textColor="@color/whiteBI"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/guideline3"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/guideline2" />-->
 
 
     <TextView
@@ -122,7 +122,7 @@
         android:ems="10"
         android:textColor="@color/whiteBI"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/text_description"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.253"
         app:layout_constraintRight_toRightOf="parent"
