@@ -339,7 +339,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("phoneId",phoneId);
                 parameters.put("phoneIdType",phoneIdType);
-                parameters.put("appid","1234");
+                parameters.put("appid",appid);
                 return parameters;
             }
         };
