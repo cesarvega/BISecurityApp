@@ -301,6 +301,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 Toast.makeText(context, "Expenses arrived", Toast.LENGTH_LONG).show();
                 try {
                     JSONArray arr = new JSONArray(s);
+                    expenses.clear();
                     for (int i=0; i<arr.length(); i++){
                         arr.getJSONObject(i).get("appId");
                         arr.getJSONObject(i).get("imgType");
