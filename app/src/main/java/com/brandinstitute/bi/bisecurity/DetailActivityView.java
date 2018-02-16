@@ -109,8 +109,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private ProgressDialog progressDialog;
     private String appid;
     private String phoneIdType;
-    private String phoneId;
-//        private String phoneId = "15555218135";
+//    private String phoneId;
+        private String phoneId = "15555218135";
+//    private String phoneId = "3057427989";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +119,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        phoneId = tMgr.getLine1Number();
+//        phoneId = tMgr.getLine1Number();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -243,8 +244,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 initializeData("", txtExpenseAmount.getText().toString(),
-                                        selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString());
-//                                initializeData(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString());
+                                        selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString(), "saveToDataBase");
                                 initializeAdapter();
                                 dialog.cancel();
                             }
@@ -269,8 +269,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
-    private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString){
-        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString));
+    private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){
+        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString, whatToDo));
 
 //        if(txtExpenseDescription != null){
 //            if(txtExpenseDescription.getText().toString() != ""){
@@ -313,8 +313,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                             FileOutputStream fos = new FileOutputStream(tempFile);
                             fos.write(bitArrayResult);
                             pathString = tempFile.getAbsolutePath().toString();
-                            initializeData("", arr.getJSONObject(i).get("recTotal").toString(), arr.getJSONObject(i).get("recType").toString(), pathString);
+                            initializeData("", arr.getJSONObject(i).get("recTotal").toString(), arr.getJSONObject(i).get("recType").toString(), pathString, "");
                             initializeAdapter();
+//                            expenses.clear();
                             fos.close();
                         } catch (IOException e) {
                             e.printStackTrace();

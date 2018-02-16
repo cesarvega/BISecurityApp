@@ -52,9 +52,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String amount;
 //    private String description;
     private String expenseType;
-    private String phoneId;
+//    private String phoneId;
+   private String img;
 
-//    private String phoneId = "15555218135";
+    private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
@@ -118,43 +119,48 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 //        progressDialog.setMessage("Uploading, please wait...");
 //        progressDialog.show();
         //sending image to server
-        StringRequest request = new StringRequest(Request.Method.POST, "https://tools.brandinstitute.com/wsbi/bimobile.asmx/addAppReceiptString", new Response.Listener<String>(){
-            @Override
-            public void onResponse(String s) {
-                progressDialog.dismiss();
+        if(expenses.get(i).whatToDo == "saveToDataBase"){
+            StringRequest request = new StringRequest(Request.Method.POST, "https://tools.brandinstitute.com/wsbi/bimobile.asmx/addAppReceiptString", new Response.Listener<String>(){
+                @Override
+                public void onResponse(String s) {
+                    progressDialog.dismiss();
                     Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
-            }
-        },new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
-            }
-        }) {
-            //adding parameters to send
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                phoneIdType ="1";
-                appid =((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length()).toString();
-                recType = expenseType;
-                recTotal = "14";
-                imgType = "base64";
-                Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("phoneId",phoneId);
-                parameters.put("phoneIdType",phoneIdType);
-                parameters.put("appid",appid);
-                parameters.put("recType",recType);
-                parameters.put("recTotal",recTotal);
-                parameters.put("imgType",imgType);
-                parameters.put("img",imgString);
-                return parameters;
-            }
-        };
 
-        RequestQueue rQueue = Volley.newRequestQueue(context);
-        rQueue.add(request);
+                }
+            },new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
+                }
+            }) {
+                //adding parameters to send
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    phoneIdType ="1";
+                    appid =((DetailActivityView) context).appointmentId.getText().subSequence(15, ((DetailActivityView) context).appointmentId.getText().length()).toString();
+                    recType = expenseType;
+                    recTotal = amount;
+                    imgType = "base64";
+                    img = imgString;
 
-//        expenseViewHolder.expensePicture.setImageResource(R.drawable.ic_info_white_24dp);
+                    Map<String, String> parameters = new HashMap<String, String>();
+                    parameters.put("phoneId",phoneId);
+                    parameters.put("phoneIdType",phoneIdType);
+                    parameters.put("appid",appid);
+                    parameters.put("recType",recType);
+                    parameters.put("recTotal",recTotal);
+                    parameters.put("imgType",imgType);
+                    parameters.put("img",img);
+                    return parameters;
+                }
+            };
+
+            RequestQueue rQueue = Volley.newRequestQueue(context);
+            rQueue.add(request);
+        }
+
+
         expenseViewHolder.expensePicture.setImageURI(Uri.parse(expenses.get(i).expensePhoto));
         expenseViewHolder.txtSpenseType.setText(expenses.get(i).expenseType);
 //        expenseViewHolder.txtDescription.setText(expenses.get(i).description);
@@ -169,7 +175,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     public String getStringImage(String path) {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 10, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }

@@ -126,8 +126,9 @@ public class MainActivity extends AppCompatActivity {
         selectedDate = month+1 + "/" + day + "/" + year;
 
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        final String mPhoneNumber = tMgr.getLine1Number();
-//        final String mPhoneNumber = "15555218135";
+//        final String mPhoneNumber = tMgr.getLine1Number();
+        final String mPhoneNumber = "15555218135";
+//        final String mPhoneNumber = "3057427989";
 
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {

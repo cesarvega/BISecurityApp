@@ -23,16 +23,18 @@ public class ExpenseList {
     String amount;
     String expenseType;
     String expensePhoto;
+    String whatToDo;
 
 
     public ExpenseList(){
         super();
     }
 
-    public ExpenseList(String description, String amount, String expenseType, String picture){
+    public ExpenseList(String description, String amount, String expenseType, String picture, String whatToDo){
         this.description = description;
         this.amount = amount;
         this.expenseType = expenseType;
         this.expensePhoto = picture;
+        this.whatToDo = whatToDo;
     }
 }
