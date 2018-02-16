@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -53,6 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -111,6 +114,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 //    private String phoneId;
         private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
+
+    private String imageString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +247,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                initializeData("", txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString(), "saveToDataBase");
+                                initializeData("", txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), imageString, "saveToDataBase");
 //                                initializeData(txtExpenseDescription.getText().toString(), txtExpenseAmount.getText().toString(), selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString());
                                 initializeAdapter();
                                 dialog.cancel();
@@ -264,8 +269,44 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+        imageString = getStringImage(file.getPath());
 
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+    }
+
+
+    public String getStringImage(String path) {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE=70;
+
+        // Find the correct scale value. It should be the power of 2.
+        int scale = 1;
+        while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){

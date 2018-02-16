@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
@@ -109,7 +110,8 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     @Override
     public void onBindViewHolder(ExpenseViewHolder expenseViewHolder, int i) {
 
-        this.imgString = getStringImage(expenses.get(i).expensePhoto);
+        this.imgString = expenses.get(i).expensePhoto;
+//        this.imgString = getStringImage(expenses.get(i).expensePhoto);
         amount =  expenses.get(i).amount;
 //        description = expenses.get(i).description;
         expenseType =expenses.get(i).expenseType;
@@ -170,30 +172,37 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         super.onAttachedToRecyclerView(expenseListView);
     }
 
-    public String getStringImage(String path) {
-
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, o);
-
-            // The new size we want to scale to
-            final int REQUIRED_SIZE=70;
-
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-                scale *= 2;
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            return Base64.encodeToString(b, Base64.DEFAULT);
-    }
+//    public String getStringImage(String path) {
+//
+//            // Decode image size
+//            BitmapFactory.Options o = new BitmapFactory.Options();
+//            o.inJustDecodeBounds = true;
+//            BitmapFactory.decodeFile(path, o);
+//
+//            // The new size we want to scale to
+//            final int REQUIRED_SIZE=70;
+//
+//            // Find the correct scale value. It should be the power of 2.
+//            int scale = 1;
+//            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+//                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+//                scale *= 2;
+//            }
+//
+//            // Decode with inSampleSize
+//            BitmapFactory.Options o2 = new BitmapFactory.Options();
+//            o2.inSampleSize = scale;
+//            Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
+//
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(90);
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//
+//
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//            byte[] b = baos.toByteArray();
+//            return Base64.encodeToString(b, Base64.DEFAULT);
+//    }
 }
