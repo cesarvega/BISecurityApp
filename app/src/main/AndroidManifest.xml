@@ -27,7 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivityView"></activity>
+        <activity android:name=".DetailActivityView"
+            android:hardwareAccelerated="true"></activity>
         <service android:name=".BackgroundService" >
             <intent-filter>
                 <action android:name="com.brandinstitute.bi.bisecurity.BackgroundService">
