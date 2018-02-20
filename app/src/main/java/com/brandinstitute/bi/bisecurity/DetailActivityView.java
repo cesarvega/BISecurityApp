@@ -191,7 +191,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         Geocoder coder = new Geocoder(this);
         List<Address> address;
         try {
-            searchForAddress = cliAddress1.getText().toString() + ", " + cliCity.getText().toString() + ", " + cliState.getText().toString();
+            String adress = (cliAddress1.getText().toString() + ", ").replace(",,",",");
+            String city = (cliCity.getText().toString() + ", ").replace(",,", ",");
+            searchForAddress =  adress + city + cliState.getText().toString();
             address = coder.getFromLocationName(searchForAddress, 5);
             if (address.size() != 0){
                 Address locationAddress = address.get(0);
