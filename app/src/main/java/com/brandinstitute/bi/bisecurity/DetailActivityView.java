@@ -99,6 +99,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String appid;
     private String phoneIdType;
     private String phoneId;
+    private String searchForAddress;
 //        private String phoneId = "15555218135";
 
     @Override
@@ -130,7 +131,14 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         txtMonth.setText(getIntent().getStringExtra("txtMonth"));
         txtDay.setText(getIntent().getStringExtra("txtDay"));
         txtTime.setText(getIntent().getStringExtra("txtTime"));
-        cliAddress1.setText(getIntent().getStringExtra("cliAddress1"));
+
+        if(getIntent().getStringExtra("cliAddress1").toString().equals("") ||getIntent().getStringExtra("cliAddress1").toString().equals(null) ){
+            cliAddress1.setVisibility(View.GONE);
+        }else{
+            cliAddress1.setText(getIntent().getStringExtra("cliAddress1"));
+        }
+
+
         if(getIntent().getStringExtra("cliAddress2").toString().equals("")){
             cliAddress2.setVisibility(View.GONE);
         }else{
@@ -173,20 +181,17 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         Geocoder coder = new Geocoder(this);
         List<Address> address;
-
         try {
-            String searchForAddress = cliAddress1.getText().toString() + ", " + cliCity.getText().toString() + ", " + cliState.getText().toString();
-
+            searchForAddress = cliAddress1.getText().toString() + ", " + cliCity.getText().toString() + ", " + cliState.getText().toString();
             address = coder.getFromLocationName(searchForAddress, 5);
-            Address locationAddress = address.get(0);
-
-            LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(position).title("Appointment Location"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
-
+            if (address.size() != 0){
+                Address locationAddress = address.get(0);
+                LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(position).title("Appointment Location"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+            }
         } catch (IOException ex) {
 
             ex.printStackTrace();
@@ -278,6 +283,12 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         lvExpenses.setAdapter(adapter);
     }
 
+    public void goGPS(View view){
+        String map = "http://maps.google.co.in/maps?q=" + searchForAddress;
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
+        startActivity(i);
+    }
+
     private void getExpenses(){
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Uploading, please wait...");
@@ -286,7 +297,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
             @Override
             public void onResponse(String s) {
                 progressDialog.dismiss();
-                Toast.makeText(context, "Expenses arrived", Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Expenses arrived", Toast.LENGTH_LONG).show();
                 try {
                     JSONArray arr = new JSONArray(s);
                     expenses.clear();
@@ -318,7 +329,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 progressDialog.dismiss();
-                Toast.makeText(context, "Expense data error -> "+volleyError, Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Expense data error -> "+volleyError, Toast.LENGTH_LONG).show();
             }
         }) {
             //adding parameters to send
