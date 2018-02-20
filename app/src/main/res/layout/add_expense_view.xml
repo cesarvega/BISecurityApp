@@ -74,6 +74,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="26dp"
         android:layout_marginTop="20dp"
+        android:inputType="numberDecimal"
         android:backgroundTint="@color/whiteBI"
         android:imeOptions="actionDone"
         android:singleLine="true"

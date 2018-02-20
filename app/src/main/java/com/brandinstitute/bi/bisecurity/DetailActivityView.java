@@ -206,7 +206,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
             if (address.size() != 0){
                 Address locationAddress = address.get(0);
                 LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(position).title("Appointment Location"));
+                mMap.addMarker(new MarkerOptions().position(position).title(searchForAddress));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
             }
         } catch (IOException ex) {
