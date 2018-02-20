@@ -1,7 +1,6 @@
 package com.brandinstitute.bi.bisecurity;
 
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 
 import com.android.volley.Request;
@@ -28,12 +26,9 @@ import com.android.volley.toolbox.Volley;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         setContentView(R.layout.recycler_view);
         this.context = this;
         Intent alarm = new Intent(this.context, AlarmReceiver.class);
@@ -94,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-
                             getAppointmentsHelper(monthOfYear, dayOfMonth, year);
                         }
                     }, mYear, mMonth, mDay);
@@ -126,9 +119,8 @@ public class MainActivity extends AppCompatActivity {
         selectedDate = month+1 + "/" + day + "/" + year;
 
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        final String mPhoneNumber = "15555218135";
         final String mPhoneNumber = tMgr.getLine1Number();
-//        final String mPhoneNumber = "3057427989";
+//        final String mPhoneNumber = "15555218135";
 
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {

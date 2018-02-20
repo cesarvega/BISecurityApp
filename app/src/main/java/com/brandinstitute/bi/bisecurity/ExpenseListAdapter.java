@@ -2,19 +2,15 @@ package com.brandinstitute.bi.bisecurity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,13 +24,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.internal.bind.ObjectTypeAdapter;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +35,6 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder> {
     private Context context;
-    private Bitmap bitmap;
     private ProgressDialog progressDialog;
     private String phoneIdType;
     private String appid;
@@ -55,11 +45,9 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String amount;
 //    private String description;
     private String expenseType;
-    private String phoneId;
    private String img;
-
+    private String phoneId;
 //    private String phoneId = "15555218135";
-//    private String phoneId = "3057427989";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout el;
@@ -114,8 +102,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     @Override
     public void onBindViewHolder(ExpenseViewHolder expenseViewHolder, int i) {
 
-        this.imgString = expenses.get(i).expensePhoto;
-//        this.imgString = getStringImage(expenses.get(i).expensePhoto);
+        this.imgString = getStringImage(expenses.get(i).expensePhoto);
         amount =  expenses.get(i).amount;
 //        description = expenses.get(i).description;
         expenseType =expenses.get(i).expenseType;
@@ -200,12 +187,5 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
             return Base64.encodeToString(b, Base64.DEFAULT);
-    }
-
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
     }
 }

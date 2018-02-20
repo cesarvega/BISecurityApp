@@ -10,28 +10,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,22 +39,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -114,9 +100,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String phoneIdType;
     private String phoneId;
 //        private String phoneId = "15555218135";
-//    private String phoneId = "3057427989";
-
-    private String imageString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,41 +255,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         file = Uri.fromFile(getOutputMediaFile());
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-    }
-
-
-    public String getStringImage(String path) {
-
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, o);
-
-        // The new size we want to scale to
-        final int REQUIRED_SIZE=70;
-
-        // Find the correct scale value. It should be the power of 2.
-        int scale = 1;
-        while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-            scale *= 2;
-        }
-
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        Bitmap bitmap = BitmapFactory.decodeFile(path,o2);
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){
