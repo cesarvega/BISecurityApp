@@ -116,7 +116,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 @Override
                 public void onResponse(String s) {
                     progressDialog.dismiss();
-                    Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
                 }
             },new Response.ErrorListener(){
                 @Override
