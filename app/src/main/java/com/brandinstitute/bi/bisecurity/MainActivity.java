@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -127,8 +128,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("Response", response);
-                initializeData(response);
-                initializeAdapter();
+                if(!response.isEmpty()){
+                    initializeData(response);
+                    initializeAdapter();
+                }else{
+                    Toast.makeText(context, "No appointments available for selected date: " + selectedDate, Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override

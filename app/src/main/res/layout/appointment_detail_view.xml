@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Address 1"
+            android:hint="Address 1"
             android:textColor="@android:color/background_light" />
 
         <TextView
@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Address 2 or Apt #"
+            android:hint="Address 2 or Apt #"
             android:textColor="@android:color/background_light" />
 
         <TextView
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="State"
+            android:hint="state"
             android:textColor="@android:color/background_light" />
 
         <TextView
@@ -134,7 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="City"
+            android:hint="City"
             android:textColor="@android:color/background_light" />
 
         <TextView
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Zipcode"
+            android:hint="Zipcode"
             android:textColor="@android:color/background_light" />
 
         <TextView
@@ -150,7 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Country"
+            android:hint="Country"
             android:textColor="@android:color/background_light" />
 
         <Button
