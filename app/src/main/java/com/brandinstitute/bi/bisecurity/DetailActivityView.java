@@ -113,10 +113,15 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String searchForAddress;
 //        private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
-
+    private ArrayList<String> expenseTypeArray ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        expenseTypeArray = new ArrayList<String>();
+        expenseTypeArray.add("1. Billable Travel Meals");
+        expenseTypeArray.add("2. Billable Travel Non-Meals");
+        expenseTypeArray.add("3. Non-Billable Travel Meals");
+        expenseTypeArray.add("4. Non-Billable Travel Non-Meals");
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -315,17 +320,14 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                     JSONArray arr = new JSONArray(s);
                     expenses.clear();
                     for (int i=0; i<arr.length(); i++){
-                        arr.getJSONObject(i).get("appId");
-                        arr.getJSONObject(i).get("imgType");
                         byte[] bitArrayResult = Base64.decode( arr.getJSONObject(i).get("img").toString(), Base64.DEFAULT);
-
                         String pathString;
                         try {
                             File tempFile = File.createTempFile("tempFile", ".jpg", null);
                             FileOutputStream fos = new FileOutputStream(tempFile);
                             fos.write(bitArrayResult);
                             pathString = tempFile.getAbsolutePath().toString();
-                            initializeData("", arr.getJSONObject(i).get("recTotal").toString(), arr.getJSONObject(i).get("recType").toString(), pathString, "");
+                            initializeData("", arr.getJSONObject(i).get("recTotal").toString(), expenseTypeArray.get((int)arr.getJSONObject(i).get("recType")-1).toString(), pathString, "");
                             initializeAdapter();
 //                            expenses.clear();
                             fos.close();

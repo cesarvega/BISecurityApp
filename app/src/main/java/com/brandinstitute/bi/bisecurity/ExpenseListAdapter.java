@@ -129,13 +129,13 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 @Override
                 public void onResponse(String s) {
                     progressDialog.dismiss();
-                    Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, "Uploaded Successful", Toast.LENGTH_LONG).show();
                 }
             },new Response.ErrorListener(){
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     progressDialog.dismiss();
-                    Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
+//                    Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
                 }
             }) {
                 //adding parameters to send
