@@ -25,7 +25,6 @@ public class ExpenseList {
     String expensePhoto;
     String whatToDo;
 
-
     public ExpenseList(){
         super();
     }

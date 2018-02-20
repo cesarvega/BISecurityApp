@@ -8,28 +8,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,21 +39,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -112,6 +101,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String phoneId;
     private String searchForAddress;
 //        private String phoneId = "15555218135";
+
 //    private String phoneId = "3057427989";
     private ArrayList<String> expenseTypeArray ;
     @Override
@@ -276,13 +266,13 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-//        cameraIntent.
         startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
     }
 
     private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){
-        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString, whatToDo));
 
+
+        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString, whatToDo));
 //        if(txtExpenseDescription != null){
 //            if(txtExpenseDescription.getText().toString() != ""){
 //                txtExpenseDescription.setText("");
