@@ -111,7 +111,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 //        progressDialog.setMessage("Uploading, please wait...");
 //        progressDialog.show();
         //sending image to server
-        if(expenses.get(i).whatToDo == "saveToDataBase"){
+        if(expenses.get(i).whatToDo == "saveToDataBase" && getItemCount()-1 == i){
             StringRequest request = new StringRequest(Request.Method.POST, "https://tools.brandinstitute.com/wsbi/bimobile.asmx/addAppReceiptString", new Response.Listener<String>(){
                 @Override
                 public void onResponse(String s) {

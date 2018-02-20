@@ -270,8 +270,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     }
 
     private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){
-        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString, whatToDo));
 
+
+        expenses.add(new ExpenseList(expenseDescription, expenseAmount, expenseType, imageString, whatToDo));
 //        if(txtExpenseDescription != null){
 //            if(txtExpenseDescription.getText().toString() != ""){
 //                txtExpenseDescription.setText("");

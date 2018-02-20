@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         appointments.clear();
         String[] appointmentArray = response.replaceAll("\"","").split("\\|");
         for(int i=0; i<appointmentArray.length; i++){
-            String[] appointmentDetail = appointmentArray[i].split(",");
+            String[] appointmentDetail = appointmentArray[i].split("~");
                 appointments.add(new AppointmentList(appointmentDetail[0], appointmentDetail[1],
                         appointmentDetail[2], appointmentDetail[3], appointmentDetail[4],
                         appointmentDetail[5], appointmentDetail[6], appointmentDetail[7],
