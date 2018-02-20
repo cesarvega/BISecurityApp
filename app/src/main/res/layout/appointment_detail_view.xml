@@ -152,12 +152,14 @@
             android:textColor="@android:color/background_light" />
 
         <Button
-            android:id="@+id/btn_check_in"
+            android:id="@+id/btn_gps"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="75dp"
             android:backgroundTint="@color/yellowBI"
-            android:text="Check-in"
-            android:textColor="@android:color/black" />
+            android:onClick="goGPS"
+            android:text="GPS Directions"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -170,10 +172,11 @@
         <Button
             android:id="@+id/btn_add_expenses"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="75dp"
             android:backgroundTint="@color/yellowBI"
             android:onClick="addExpenses"
-            android:text="Add Expense" />
+            android:text="Add Expense"
+            android:textSize="18sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_view_expenses"
