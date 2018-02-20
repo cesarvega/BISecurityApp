@@ -122,7 +122,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     progressDialog.dismiss();
-                    Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
+//                    Toast.makeText(context, "Some error occurred -> "+volleyError, Toast.LENGTH_LONG).show();;
                 }
             }) {
                 //adding parameters to send
