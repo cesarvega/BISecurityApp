@@ -23,6 +23,7 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -235,6 +236,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.spinnerTheme);
                 alertDialogBuilder.setView(promptView);
+                alertDialogBuilder.setPositiveButton("Save", null);
+                alertDialogBuilder.setNegativeButton("Cancel", null);
                 this.imageView = (ImageView)promptView.findViewById(R.id.expensePhoto);
                 this.imageView.setRotation(90);
 //                txtExpenseDescription = (TextView)promptView.findViewById(R.id.expenseDescription);
@@ -242,22 +245,54 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 selectedSpinnerOption = (Spinner) promptView.findViewById(R.id.selectionExpenseType);
                 imageView.setImageURI(file);
 
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                initializeData("", txtExpenseAmount.getText().toString(),
-                                        selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString(), "saveToDataBase");
-                                initializeAdapter();
-                                dialog.cancel();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+//                alertDialogBuilder.setCancelable(false)
+//                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+
+
+                // create an alert dialog
+                final AlertDialog alert = alertDialogBuilder.create();
+                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        Button btn = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(txtExpenseAmount.getText().toString().isEmpty() || txtExpenseAmount.getText().toString().equals("") || txtExpenseAmount.getText().toString() == null){
+                                    Toast.makeText(context, "Please provide an amount to save the expense", Toast.LENGTH_LONG).show();
+                                }else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivityView.this, R.style.alertDialogConfirmation);
+                                    builder.setMessage("You will not be able to delete this expense. Are you sure you want to submit?")
+                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    initializeData("", txtExpenseAmount.getText().toString(),
+                                                            selectedSpinnerOption.getSelectedItem().toString().subSequence(0, 1).toString(), file.getPath().toString(), "saveToDataBase");
+                                                    initializeAdapter();
+                                                    dialog.dismiss();
+                                                    alert.dismiss();
+                                                }
+                                            })
+                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                                    AlertDialog alertConfirmation = builder.create();
+                                    alertConfirmation.show();
+                                }
                             }
                         });
-                // create an alert dialog
-                AlertDialog alert = alertDialogBuilder.create();
+                    }
+                });
                 alert.show();
             }
         }
