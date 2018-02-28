@@ -202,7 +202,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
             }
         } catch (IOException ex) {
-
             ex.printStackTrace();
         }
 
@@ -355,6 +354,4 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         RequestQueue rQueue = Volley.newRequestQueue(context);
         rQueue.add(request);
     }
-
-
 }
