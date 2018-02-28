@@ -101,17 +101,16 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String phoneId;
     private String searchForAddress;
 //        private String phoneId = "15555218135";
-
 //    private String phoneId = "3057427989";
     private ArrayList<String> expenseTypeArray ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         expenseTypeArray = new ArrayList<String>();
-        expenseTypeArray.add("1. Billable Travel Meals");
-        expenseTypeArray.add("2. Billable Travel Non-Meals");
-        expenseTypeArray.add("3. Non-Billable Travel Meals");
-        expenseTypeArray.add("4. Non-Billable Travel Non-Meals");
+        expenseTypeArray.add("Billable Travel Meals");
+        expenseTypeArray.add("Billable Travel Non-Meals");
+        expenseTypeArray.add("Non-Billable Travel Meals");
+        expenseTypeArray.add("Non-Billable Travel Non-Meals");
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -196,11 +195,12 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
             searchForAddress =  adress + city + cliState.getText().toString();
             address = coder.getFromLocationName(searchForAddress, 5);
             if (address.size() != 0){
+
                 Address locationAddress = address.get(0);
                 LatLng position = new LatLng(locationAddress.getLatitude(), locationAddress.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(position).title(searchForAddress));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
-            }
+            }else {Toast.makeText(context, "Sorry, we could not find the appointment address ", Toast.LENGTH_LONG).show();}
         } catch (IOException ex) {
             ex.printStackTrace();
         }
