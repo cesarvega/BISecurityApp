@@ -45,8 +45,10 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     private String amount;
 //    private String description;
     private String expenseType;
-   private String img;
+    private String img;
     private String phoneId;
+    public String deviceId;
+    private static String mPhoneNumber;
 //    private String phoneId = "15555218135";
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
@@ -83,8 +85,9 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         this.expenses = expenses;
         this.context = context;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        phoneId = tMgr.getLine1Number();
-
+//        this.mPhoneNumber = null;
+        this.mPhoneNumber = tMgr.getLine1Number();
+        phoneId = (tMgr.getLine1Number() == null)? "D-" + tMgr.getDeviceId(): tMgr.getLine1Number();
     }
 
     @Override

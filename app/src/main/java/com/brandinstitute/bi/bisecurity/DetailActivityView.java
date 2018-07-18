@@ -7,11 +7,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,6 +43,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -91,6 +95,7 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     TextView txtExpenseAmount;
     ImageView imageView;
     Spinner selectedSpinnerOption;
+    private final String sendLocationURL = "https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocation";
 
     private ArrayList expenses = new ArrayList<>();
 
@@ -101,6 +106,9 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     private String phoneIdType;
     private String phoneId;
     private String searchForAddress;
+    private static String mPhoneNumber;
+    private static String latitude;
+    private static String longitude;
 //        private String phoneId = "15555218135";
 //    private String phoneId = "3057427989";
     private ArrayList<String> expenseTypeArray ;
@@ -115,7 +123,16 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         setContentView(R.layout.appointment_detail_view);
         this.context = this;
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        phoneId = tMgr.getLine1Number();
+//        this.mPhoneNumber = null;
+        phoneId = (tMgr.getLine1Number() == null)? "D-" + tMgr.getDeviceId(): tMgr.getLine1Number();
+        SharedPreferences prefs = this.getSharedPreferences("Someprefstringreference", 0);
+        String not_set = "NOTSET";
+        String android_key;
+        android_key = prefs.getString("id", not_set);
+        if (android_key != not_set && phoneId == null) {
+            mPhoneNumber = android_key;
+            phoneId = android_key;
+        }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -178,11 +195,11 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
 
         cliPhone.setText(getIntent().getStringExtra("cliPhone"));
         appointmentId.setText("Appointment #: " + getIntent().getStringExtra("appointmentId"));
-        lvExpenses= (RecyclerView) findViewById(R.id.list_view_expenses);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        lvExpenses.setLayoutManager(llm);
-        lvExpenses.setHasFixedSize(true);
-        getExpenses();
+//        lvExpenses= (RecyclerView) findViewById(R.id.list_view_expenses);
+//        LinearLayoutManager llm = new LinearLayoutManager(this);
+//        lvExpenses.setLayoutManager(llm);
+//        lvExpenses.setHasFixedSize(true);
+//        getExpenses();
     }
 
     @Override
@@ -211,20 +228,20 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
     static final int REQUEST_TAKE_PHOTO = 1;
     Uri file;
 
-    private static File getOutputMediaFile(){
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "CameraDemo");
-
-        if (!mediaStorageDir.exists()){
-            if (!mediaStorageDir.mkdirs()){
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-    }
+//    private static File getOutputMediaFile(){
+//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES), "CameraDemo");
+//
+//        if (!mediaStorageDir.exists()){
+//            if (!mediaStorageDir.mkdirs()){
+//                return null;
+//            }
+//        }
+//
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        return new File(mediaStorageDir.getPath() + File.separator +
+//                "IMG_"+ timeStamp + ".jpg");
+//    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO) {
@@ -244,19 +261,6 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 txtExpenseAmount = (TextView)promptView.findViewById(R.id.expenseAmount);
                 selectedSpinnerOption = (Spinner) promptView.findViewById(R.id.selectionExpenseType);
                 imageView.setImageURI(file);
-
-//                alertDialogBuilder.setCancelable(false)
-//                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-
 
                 // create an alert dialog
                 final AlertDialog alert = alertDialogBuilder.create();
@@ -298,12 +302,12 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         }
     }
 
-    public void addExpenses(View view){
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFile());
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-    }
+//    public void addExpenses(View view){
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        file = Uri.fromFile(getOutputMediaFile());
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+//        startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+//    }
 
     private void initializeData(String expenseDescription, String expenseAmount, String expenseType, String imageString, String whatToDo){
 
@@ -326,6 +330,28 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
         ExpenseListAdapter adapter = new ExpenseListAdapter(expenses, this.context);
         lvExpenses.setAdapter(adapter);
     }
+
+    public void checkIn(View view) {
+            // Try to obtain the map from the SupportMapFragment.
+            mMap.setMyLocationEnabled(true);
+            // Check if we were successful in obtaining the map.
+            if (mMap != null) {
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null){
+                    longitude = Double.toString(location.getLongitude());
+                    latitude = Double.toString(location.getLatitude());
+                    LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(position).title(searchForAddress).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+                    setLatandlong();
+                }else{
+                    Toast.makeText(context, "Location error" , Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+
 
     public void goGPS(View view){
         String map = "http://maps.google.co.in/maps?q=" + searchForAddress;
@@ -382,6 +408,45 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 parameters.put("phoneId",phoneId);
                 parameters.put("phoneIdType",phoneIdType);
                 parameters.put("appid",appid);
+                return parameters;
+            }
+        };
+
+        RequestQueue rQueue = Volley.newRequestQueue(context);
+        rQueue.add(request);
+    }
+
+
+    private void setLatandlong(){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Uploading, please wait...");
+        progressDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, sendLocationURL, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "You have checked in", Toast.LENGTH_LONG).show();
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "An error occurred while you try to check in"+volleyError, Toast.LENGTH_LONG).show();
+            }
+        }) {
+            //adding parameters to send
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String mDate = dateFormat.format(new Date());
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("phoneId", phoneId);// number
+                parameters.put("phoneIdType", "1" );
+                parameters.put("geoDate", mDate);
+                parameters.put("appId", "0");
+                parameters.put("geoLatitude", longitude);
+                parameters.put("geoLongitude", longitude );
                 return parameters;
             }
         };

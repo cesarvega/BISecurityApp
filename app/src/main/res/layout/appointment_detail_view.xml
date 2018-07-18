@@ -171,22 +171,32 @@
             android:layout_height="200dp"
             tools:context=".DetailActivityView" />
 
+        <!--<Button-->
+            <!--android:id="@+id/btn_add_expenses"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="75dp"-->
+            <!--android:backgroundTint="@color/yellowBI"-->
+            <!--android:onClick="addExpenses"-->
+            <!--android:text="Add Expense"-->
+            <!--android:textSize="18sp" />-->
+
+
         <Button
-            android:id="@+id/btn_add_expenses"
+            android:id="@+id/btn_checkin"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:backgroundTint="@color/yellowBI"
-            android:onClick="addExpenses"
-            android:text="Add Expense"
+            android:onClick="checkIn"
+            android:text="Check In"
             android:textSize="18sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_view_expenses"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/background_light">
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/list_view_expenses"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@android:color/background_light">-->
 
-        </android.support.v7.widget.RecyclerView>
+        <!--</android.support.v7.widget.RecyclerView>-->
 
 
     </LinearLayout>

@@ -1,11 +1,15 @@
 package com.brandinstitute.bi.bisecurity;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,20 +34,45 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
     private RecyclerView rv;
     public String selectedDate;
+    public String deviceId;
+    public String mPhoneNumber;
+    public String softwareVersion = "v0.14";
+    public String android_key;
     private ArrayList appointments = new ArrayList<>();
 
 //    private
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }else{
+//            Toast.makeText(context, "Please enable your location services in order for this app to work " , Toast.LENGTH_LONG).show();
+        }
+        createVerifierStrings();
         setContentView(R.layout.recycler_view);
         this.context = this;
+        TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        mPhoneNumber = (tMgr.getLine1Number() == null)? "D-" + tMgr.getDeviceId(): tMgr.getLine1Number();
+        deviceId = tMgr.getDeviceId();
+        SharedPreferences prefs = this.getSharedPreferences("Someprefstringreference", 0);
+        String not_set = "NOTSET";
+        android_key = prefs.getString("id", not_set);
+        if (android_key != not_set && tMgr.getLine1Number() == null) {
+            mPhoneNumber = android_key;
+        }
+
+        this.setTitle("Brand Institute " + softwareVersion);
+
         Intent alarm = new Intent(this.context, AlarmReceiver.class);
         boolean alarmRunning = (PendingIntent.getBroadcast(this.context, 0, alarm, PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmRunning == false) {
@@ -118,11 +147,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void getAppointmentsHelper(int month, int day, int year){
         selectedDate = month+1 + "/" + day + "/" + year;
-
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        final String mPhoneNumber = tMgr.getLine1Number();
-//        final String mPhoneNumber = "15555218135";
-
+        mPhoneNumber = (tMgr.getLine1Number() == null)?  tMgr.getDeviceId():  tMgr.getLine1Number();
+        SharedPreferences prefs = this.getSharedPreferences("Someprefstringreference", 0);
+        String not_set = "NOTSET";
+        final String android_key;
+        android_key = prefs.getString("id", not_set);
+        if (android_key != not_set && mPhoneNumber == null) {
+            mPhoneNumber = android_key;
+        }
+        this.android_key = android_key;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST,"https://tools.brandinstitute.com/wsbi/bimobile.asmx/getAppointmentsPipedString", new Response.Listener<String>() {
             @Override
@@ -141,16 +175,43 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Error.Response", String.valueOf(error));
             }
         }){
+            TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("phoneId",mPhoneNumber);
-                params.put("phoneIdType","1");
+                params.put("phoneIdType","1" + softwareVersion + "_P" + mPhoneNumber +  "_D" + deviceId + "_K" + android_key);
                 params.put("selDate", selectedDate);
                 return params;
             }
-
         };
         queue.add(sr);
     }
+
+    protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 6) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+    }
+
+    private void createVerifierStrings() {
+        SharedPreferences prefs = this.getSharedPreferences("Someprefstringreference", 0);
+        String not_set = "NOTSET";
+        String android_key;
+        android_key = prefs.getString("id", not_set);
+         if (android_key.equals(not_set)) {
+            android_key = getSaltString();
+            prefs.edit().putString("id", android_key).commit();
+            this.android_key =android_key;
+        }else{
+             this.android_key =android_key;
+         }
+    }
 }
+

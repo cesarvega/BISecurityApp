@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import android.app.Service;
@@ -96,7 +95,6 @@ public class AppointmentList   {
     private Context mContext;
     private Thread backgroundThread;
 
-    private static String mPhoneNumber;
     private static String appointments;
     private static String mDate;
     private static String mSource;

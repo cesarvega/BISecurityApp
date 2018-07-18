@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,7 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -75,11 +77,21 @@ public class BackgroundService extends Service {
         this.mContext = getApplicationContext();
         this.isRunning = false;
 
-
         // Phone Number
         TelephonyManager phoneManager = (TelephonyManager)
                 getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+
         mPhoneNumber = phoneManager.getLine1Number();
+//        mPhoneNumber = null;
+        mPhoneNumber = (mPhoneNumber == null)? "D-" + phoneManager.getDeviceId(): phoneManager.getLine1Number();
+        SharedPreferences prefs = this.getSharedPreferences("Someprefstringreference", 0);
+        String not_set = "NOTSET";
+        String android_key;
+        android_key = prefs.getString("id", not_set);
+        if (android_key != not_set && mPhoneNumber == null) {
+            mPhoneNumber = android_key;
+        }
+
 
         // Time
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,8 +105,11 @@ public class BackgroundService extends Service {
 
             Location loc = getLocation();
 
-            addGEOLocation(mPhoneNumber, mDate, Double.toString(loc.getLatitude()), Double.toString(loc.getLongitude()));
-
+            if (loc != null){
+                addGEOLocation(mPhoneNumber, mDate, Double.toString(loc.getLatitude()), Double.toString(loc.getLongitude()));
+            }else{
+                addGEOLocation(mPhoneNumber, mDate, "00", "00");// sending  zeros when location service is not enable
+            }
             stopSelf();
         }
     };
