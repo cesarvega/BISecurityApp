@@ -445,8 +445,8 @@ public class DetailActivityView extends FragmentActivity implements OnMapReadyCa
                 parameters.put("phoneIdType", "1" );
                 parameters.put("geoDate", mDate);
                 parameters.put("appId", "0");
-                parameters.put("geoLatitude", longitude);
-                parameters.put("geoLongitude", longitude );
+                parameters.put("geoLatitude", latitude );
+                parameters.put("geoLongitude",longitude);
                 return parameters;
             }
         };
